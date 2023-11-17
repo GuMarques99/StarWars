@@ -1,0 +1,98 @@
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<style>
+
+  i,svg {
+    font-size: 24px;
+  }
+
+  a {
+    text-decoration: none;
+  }
+
+  .card-title {
+    margin-left: 1rem;
+    margin-bottom: 0;
+  }
+
+  .card:hover {
+    background-color: darkblue;
+    color: white;
+    transition: background-color 0.5s ease;
+  }
+
+</style>
+
+<main>
+  <h1>Star Wars</h1>
+  <section class="d-flex flex-lg-wrap col-12">
+    <a href="/Home/Films" class="col-md-6 p-1">
+      <div class="card">
+        <div class="card-body d-flex justify-content-between">
+          <div class="d-flex flex-row align-items-center">
+            <i class="bi bi-film"></i>
+            <h5 class="card-title">Films</h5>
+          </div>
+          <i class="bi bi-arrow-right-circle-fill"></i>
+        </div>
+      </div>
+    </a>
+    <a href="#" class="col-md-6 p-1">
+      <div class="card">
+        <div class="card-body d-flex justify-content-between">
+          <div class="d-flex flex-rows align-items-center">
+            <i class="bi bi-person-video"></i>
+            <h5 class="card-title">Characters</h5>
+          </div>
+          <i class="bi bi-arrow-right-circle-fill"></i>
+        </div>
+      </div>
+    </a>
+    <a href="#" class="col-md-6 p-1">
+      <div class="card">
+        <div class="card-body d-flex justify-content-between">
+          <div class="d-flex flex-rows align-items-center">
+            <i class="bi bi-globe-americas"></i>
+            <h5 class="card-title">Planets</h5>          
+          </div>
+          <i class="bi bi-arrow-right-circle-fill"></i>
+        </div>
+      </div>
+    </a>
+    <a href="#" class="col-md-6 p-1">
+      <div class="card">
+        <div class="card-body d-flex justify-content-between">
+          <div class="d-flex flex-row align-items-center">
+            <i class="bi bi-people-fill"></i>
+            <h5 class="card-title">Species</h5>
+          </div>
+          <i class="bi bi-arrow-right-circle-fill"></i>
+        </div>
+      </div>
+    </a>
+    <a href="#" class="col-md-6 p-1">
+      <div class="card">
+        <div class="card-body d-flex justify-content-between">
+          <div class="d-flex flex-row align-items-center">
+            <i class="bi bi-rocket-fill"></i>
+            <h5 class="card-title">Starships</h5>
+          </div>
+          <i class="bi bi-arrow-right-circle-fill"></i>
+        </div>
+      </div>
+    </a>
+    <a href="#" class="col-md-6 p-1">
+      <div class="card">
+        <div class="card-body d-flex justify-content-between">
+          <div class="d-flex flex-row align-items-center">
+            <i class="bi bi-car-front-fill"></i>
+            <h5 class="card-title">Vehicles</h5>
+          </div>
+          <i class="bi bi-arrow-right-circle-fill"></i>
+        </div>
+      </div>
+    </a>
+  </section>
+</main>
