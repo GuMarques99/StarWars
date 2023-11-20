@@ -1,13 +1,14 @@
-@model IEnumerable<Web_StarWars.Models.Film>
+@model IEnumerable<StarWarsApiCSharp.Film>
+@{
+  ViewBag.Title = "Star Wars - Films";
+}
 
-<style>
-  .info-section {
-    margin-bottom: 20px;
-  }
-</style>
 
 <main>
-  <h2>Films</h2>
+
+  <div class="page-title col-8 offset-2">
+    <h1><i class="bi bi-film"></i> Films</h1>
+  </div>
 
   <table class="table">
     <thead>
@@ -20,12 +21,9 @@
       </tr>
     </thead>
     <tbody>
-      @{
-        int index = 0;
-      }
       @foreach (var item in Model)
       {
-        index++;
+        string obj = Json.Encode(item);
         <tr>
           <td>
             @Html.DisplayFor(modelItem => item.Title)
@@ -34,96 +32,41 @@
             @Html.DisplayFor(modelItem => item.EpisodeId)
           </td>
           <td>
-            @Html.DisplayFor(modelItem => item.ReleaseDate.ToString("dd/MM/yyyy"))
+            @Html.Raw(item.ReleaseDate)
           </td>
           <td>
             @Html.DisplayFor(modelItem => item.Director)
           </td>
           <td>
-            <button type="button" class="btn btn-light" onclick="openDetails('@item.Url')" data-bs-toggle="tooltip" data-bs-title="Abrir Detalhes"><i class="bi bi-arrow-right-circle-fill"></i></button>
+            <button type="button" class="btn btn-light" onclick="openDetails('@obj')" data-bs-toggle="tooltip" data-bs-title="Abrir Detalhes"><i class="bi bi-arrow-right-circle-fill"></i></button>
           </td>
         </tr>
       }
     </tbody>
   </table>
-
-  <div class="modal fade" id="modal-detalhes" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modal detalhes do filme" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="title">Modal title</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form>
-            <div class="mb-3">
-              <label for="exampleInputEmail1" class="form-label">Email address</label>
-              <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-              <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
-            </div>
-            <div class="mb-3">
-              <label for="exampleInputPassword1" class="form-label">Password</label>
-              <input type="password" class="form-control" id="exampleInputPassword1">
-            </div>
-            <div class="mb-3 form-check">
-              <input type="checkbox" class="form-check-input" id="exampleCheck1">
-              <label class="form-check-label" for="exampleCheck1">Check me out</label>
-            </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-          </form>
-
-          <div class="info-section">
-            <p><strong>Episódio ID:</strong> <span id="episode_id"></span></p>
-            <!-- Adicione outras propriedades aqui -->
-          </div>
-          <div class="info-section">
-            <p><strong>People:</strong> <span id="characters"></span></p>
-            <p><strong>Planetas:</strong> <span id="planets"></span></p>
-            <p><strong>Starships:</strong> <span id="starships"></span></p>
-            <p><strong>Vehicles:</strong> <span id="vehicles"></span></p>
-            <p><strong>Espécies:</strong> <span id="species"></span></p>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
 </main>
 
 @section scripts {
   <script type="text/javascript">
 
+    function openDetails(data) {
+      if (typeof (data) == "string")
+        data = JSON.parse(data.replaceAll("\r", "").replaceAll("\n", "<br/>"));
 
-    function openDetails(url) {
-      $.ajax({
-        url: url,
-        type: "GET",
-        success: function (data) {
-          console.log(data);
+      const info = [
+        ["Episode", data.EpisodeId],
+        ["Release Date", data.ReleaseDate],
+        ["Director", data.Director],
+        ["Producer", data.Producer],
+        ["Opening", data.OpeningCrawl],
+        ["Characters", data.Characters.length],
+        ["Planets", data.Planets.length],
+        ["Species", data.Species.length],
+        ["Starships", data.Starships.length],
+        ["Vehicles", data.Vehicles.length]
+      ];
 
-          const filme = data;
-
-          $("#title").text(filme.title);
-          $("#episode_id").text(filme.episode_id);
-          $("#characters").text(filme.characters.length);
-          $("#planets").text(filme.planets.length);
-          $("#starships").text(filme.starships.length);
-          $("#vehicles").text(filme.vehicles.length);
-          $("#species").text(filme.species.length);
-
-          const myModal = new bootstrap.Modal('#modal-detalhes', {
-            keyboard: false
-          }).show();
-        },
-        error: function (error) {
-          alert("erro: " + error)
-          console.log("Erro: " + error);
-        }
-      });
-
-    }
+      openDetailsModal("Star Wars: " + data.Title, info);
+    }    
   </script>
 } 

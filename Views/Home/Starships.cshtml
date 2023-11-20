@@ -1,0 +1,72 @@
+@model IEnumerable<StarWarsApiCSharp.Starship>
+@{
+  ViewBag.Title = "Star Wars - Starships";
+}
+
+<main>
+  <div class="page-title col-8 offset-2">
+    <h1><i class="bi bi-rocket-fill"></i> Starships</h1>
+  </div>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Model</th>
+        <th>Class</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      @foreach (var item in Model)
+      {
+        string obj = Json.Encode(item);
+        <tr>
+          <td>
+            @Html.DisplayFor(modelItem => item.Name)
+          </td>
+          <td>
+            @Html.DisplayFor(modelItem => item.Model)
+          </td>
+          <td>
+            @Html.DisplayFor(modelItem => item.StarshipClass)
+          </td>
+          <td>
+            <button type="button" class="btn btn-light" onclick="openDetails('@obj')" data-bs-toggle="tooltip" data-bs-title="Open Details"><i class="bi bi-arrow-right-circle-fill"></i></button>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+
+</main>
+
+@section scripts {
+  <script type="text/javascript">
+
+    function openDetails(data) {
+      if (typeof (data) == "string")
+        data = JSON.parse(data.replaceAll("\r", "").replaceAll("\n", "<br/>"));
+
+      const info = [
+        ["Model", data.Model],
+        ["Starship Class", data.StarshipClass],
+        ["Manufacturer", data.Manufacturer],
+        ["Cost", numberWithUnit(data.CostInCredits, "credits")],
+        ["Length", numberWithUnit(data.Length, "m")],
+        ["Crew", data.Crew],
+        ["Passengers", data.Passengers],
+        ["Max. Atmosphering Speed", numberWithUnit(data.MaxAtmospheringSpeed, "Km/h")],
+        ["Hyperdrive Rating", data.HyperdriveRating],
+        ["Mega Lights", data.MegaLights],
+        ["Cargo Capacity", numberWithUnit(data.CargoCapacity, "Kg")],
+        ["Consumables", data.Consumables],
+        ["Films", data.Films.length],
+        ["Pilots", data.Pilots.length],
+      ];
+
+      openDetailsModal("Name: " + data.Name, info);
+    }    
+
+  </script>
+} 

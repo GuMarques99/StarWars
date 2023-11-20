@@ -1,0 +1,67 @@
+@model IEnumerable<StarWarsApiCSharp.Planet>
+@{
+  ViewBag.Title = "Star Wars - Planets";
+}
+
+<main>
+  <div class="page-title col-8 offset-2">
+    <h1><i class="bi bi-globe-americas"></i> Planets</h1>
+  </div>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Diameter</th>
+        <th>Terrain</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      @foreach (var item in Model)
+      {
+        string obj = Json.Encode(item);
+        <tr>
+          <td>
+            @Html.DisplayFor(modelItem => item.Name)
+          </td>
+          <td>
+            @Html.DisplayFor(modelItem => item.Diameter)
+          </td>
+          <td>
+            @Html.DisplayFor(modelItem => item.Terrain)
+          </td>
+          <td>
+            <button type="button" class="btn btn-light" onclick="openDetails('@obj')" data-bs-toggle="tooltip" data-bs-title="Open Details"><i class="bi bi-arrow-right-circle-fill"></i></button>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+
+</main>
+
+@section scripts {
+  <script type="text/javascript">
+
+    function openDetails(data) {
+      if (typeof (data) == "string")
+        data = JSON.parse(data.replaceAll("\r", "").replaceAll("\n", "<br/>"));
+
+      const info = [
+        ["Diameter", data.Diameter],
+        ["Rotation Period", numberWithUnit(data.RotationPeriod, "h")],
+        ["Orbital Period", numberWithUnit(data.OrbitalPeriod, "standart days")],
+        ["Gravity", data.Gravity],
+        ["Climate", data.Climate],
+        ["Terrain", data.Terrain],
+        ["Surface Water", numberWithUnit(data.SurfaceWater, "%")],
+        ["Residents", data.Residents.length],
+        ["Films", data.Films.length]
+      ];
+
+      openDetailsModal("Name: " + data.Name, info);
+    }    
+
+  </script>
+} 

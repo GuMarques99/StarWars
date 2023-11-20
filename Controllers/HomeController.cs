@@ -4,8 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using Web_StarWars.Models;
 using Web_StarWars.Services;
+using StarWarsApiCSharp;
 
 namespace Web_StarWars.Controllers
 {
@@ -30,22 +30,45 @@ namespace Web_StarWars.Controllers
       return View();
     }
 
-    public async Task<ActionResult> Films()
+    public ActionResult Films()
     {
-      ViewBag.Message = "Star Wars Films";
-
-      HttpService service = new HttpService();
-
-      Results<Film> result = await service.GetAsync<Results<Film>>("http://swapi.dev/api/films");
-
-      IEnumerable<Film> res = result.results;
-
-      return View(res);
+      IRepository<StarWarsApiCSharp.Film> filmsRepo = new Repository<StarWarsApiCSharp.Film>();
+      var films = filmsRepo.GetEntities(size: int.MaxValue).ToList();
+      return View(films);
+    }
+    public ActionResult Characters()
+    {
+      IRepository<StarWarsApiCSharp.Person> filmsRepo = new Repository<StarWarsApiCSharp.Person>();
+      var people = filmsRepo.GetEntities(size: int.MaxValue).ToList();
+      return View(people);
     }
 
-    public async Task<ActionResult> GetFilmDetail(string url)
+    public ActionResult Planets()
     {
-      return null;
+      IRepository<StarWarsApiCSharp.Planet> filmsRepo = new Repository<StarWarsApiCSharp.Planet>();
+      var planets = filmsRepo.GetEntities(size: int.MaxValue).ToList();
+      return View(planets);
+    }
+
+    public ActionResult Species()
+    {
+      IRepository<StarWarsApiCSharp.Specie> filmsRepo = new Repository<StarWarsApiCSharp.Specie>();
+      var species = filmsRepo.GetEntities(size: int.MaxValue).ToList();
+      return View(species);
+    }
+
+    public ActionResult Starships()
+    {
+      IRepository<StarWarsApiCSharp.Starship> filmsRepo = new Repository<StarWarsApiCSharp.Starship>();
+      var starships = filmsRepo.GetEntities(size: int.MaxValue).ToList();
+      return View(starships);
+    }
+
+    public ActionResult Vehicles()
+    {
+      IRepository<StarWarsApiCSharp.Vehicle> filmsRepo = new Repository<StarWarsApiCSharp.Vehicle>();
+      var starships = filmsRepo.GetEntities(size: int.MaxValue).ToList();
+      return View(starships);
     }
   }
 }

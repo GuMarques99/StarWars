@@ -8,33 +8,173 @@
   @Styles.Render("~/Content/css")
   @Scripts.Render("~/bundles/modernizr")
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-
+  <link href="https://fonts.cdnfonts.com/css/star-wars" rel="stylesheet">
 </head>
 <body>
   <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
     <div class="container">
-      @Html.ActionLink("Star Wars", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+
+      @Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
       <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Alternar a navegação" aria-controls="navbarSupportedContent"
               aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      
+
     </div>
   </nav>
   <div class="container body-content">
     @RenderBody()
     <hr />
     <footer>
-      <p>&copy; @DateTime.Now.Year - Meu Aplicativo ASP.NET</p>
+      <p>&copy; @DateTime.Now.Year - Web Star Wars</p>
     </footer>
   </div>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+  <div class="modal fade" id="modal-details" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="film details modal" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5"></h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <table class="table table-bordered table-striped table-hover">
+            <tbody id="details-table">
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   @Scripts.Render("~/bundles/jquery")
   @Scripts.Render("~/bundles/bootstrap")
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   @RenderSection("scripts", required: false)
   <script type="text/javascript">
-    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+
+    const modalDetails = new bootstrap.Modal('#modal-details', {
+      keyboard: false
+    });
+
+    setTimeout(() => {
+      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    }, 500);
+
+
+    function startLoading() {
+      Swal.fire({
+        title: "Loading...",
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+    }
+
+    function stopLoading() { Swal.close() };
+
+    function showErrorMessage(message) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Something went wrong!<br/>" + message,
+      });
+    }
+
+    function openDetailsModal(title, info) {
+      $("#modal-details .modal-title").text(title);
+
+      $("#details-table").html("");
+
+      info.map(i => {
+        const html = `
+            <tr>
+              <td class="col-3 fw-bold">${i[0]}</td>
+              <td class="${ hasInformation(i[1]) ? "" : "fst-italic fw-light" }">${ i[1] }</td>
+            </tr>`
+        $("#details-table").append(html);
+      });
+
+      modalDetails.show();
+    }
+
+    function hasInformation(data) {
+      return !(["unknown", "n/a"].includes(data));
+    }
+
+      function numberWithUnit(data, unit) {
+        return hasInformation(data) && !isNaN(parseFloat(data)) ? parseFloat(data).toLocaleString() + " " + unit : data
+      }
+
+      let homeWorlds = {};
+      let speciesDict = {};
+
+      async function getHomeWorldName(url) {
+        let home = homeWorlds[url]
+
+        if (!home) {
+          if (url) {
+            startLoading();
+
+            await $.ajax({
+              url: url,
+              type: "GET",
+              async: true,
+              success: function (data) {
+                home = data.name;
+              },
+              error: function (error) {
+                home = "unknown"
+              }
+            });
+            stopLoading();
+          } else {
+            home = "unknown"
+          }
+
+          homeWorlds[url] = home;
+
+        }
+
+        return home;
+      }
+
+      async function getSpecieName(url) {
+        let specie = speciesDict[url]
+
+        if (!specie) {
+          if (url) {
+            startLoading();
+
+            await $.ajax({
+              url: url,
+              type: "GET",
+              async: true,
+              success: function (data) {
+                specie = data.name;
+              },
+              error: function (error) {
+                specie = "unknown"
+              }
+            });
+            stopLoading();
+          } else {
+            specie = "unknown"
+          }
+
+          speciesDict[url] = specie;
+
+        }
+
+        return specie;
+      }
+
   </script>
 </body>
 </html>
