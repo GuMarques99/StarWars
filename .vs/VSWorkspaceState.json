@@ -1,7 +1,9 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\Views",
+    "\\Views\\Home"
   ],
-  "SelectedNode": "\\C:\\Users\\gmarq\\OneDrive\\Documentos\\PROJETOS\\StarWars\\StarWars",
+  "SelectedNode": "\\Views\\Home\\Films.cshtml",
   "PreviewInSolutionExplorer": false
 }
